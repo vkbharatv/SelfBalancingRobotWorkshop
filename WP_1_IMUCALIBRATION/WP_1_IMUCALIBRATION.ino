@@ -1,5 +1,19 @@
 #include <Wire.h>
 #include <math.h>
+/*
+
+  IMU Calibration and Fusion
+  Bord: NodeMCU ESP8266
+  By: Dr Bharat Verma
+  Date: 22/10/2026
+  Workshop Day 1 Topic: IMU Calibration and Fusion using MPU-6050
+  Lab: Control System Lab, ECE Department, The LNMIIT, Jaipur, India
+  Society: RAS IEEE Student Branch, The LNMIIT, Jaipur, India
+  Description: This code demonstrates the calibration and fusion of data from the MPU-6050 IMU.
+  Exercise: Calibrate the gyroscope and fuse accelerometer and gyroscope data to compute roll and pitch angles. Afterthat, try different sensitivity settings and complimentary filter coefficients to observe their effects on the output angles.
+  Outcome: Participants should complete the calibration and fusion process, and understand how to adjust parameters for optimal performance.
+
+*/
 
 // MPU-6050 Standard I2C Address (0x68)
 const uint8_t MPU6050_ADDR = 0x68;
