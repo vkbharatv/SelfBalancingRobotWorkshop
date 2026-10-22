@@ -2,7 +2,7 @@
 #include <math.h>
 /*
   IMU Calibration and Fusion
-  Bord: NodeMCU ESP8266
+  Board: NodeMCU ESP8266
   By: Dr Bharat Verma
   Date: 22/10/2026
   Workshop Day 1 Topic: IMU Calibration and Fusion using MPU-6050
@@ -15,6 +15,8 @@
 
 // MPU-6050 Standard I2C Address (0x68)
 const uint8_t MPU6050_ADDR = 0x68;
+const uint8_t I2C_SDA_PIN = D2;
+const uint8_t I2C_SCL_PIN = D1;
 
 // Register Addresses
 const uint8_t REG_CONFIG       = 0x1A; // Low Pass Filter
@@ -60,7 +62,7 @@ void setup() {
   Serial.begin(115200);
 
   // 1. Initialize I2C Pins for NodeMCU (D2 = SDA, D1 = SCL)
-  Wire.begin(D2, D1);
+  Wire.begin(I2C_SDA_PIN, I2C_SCL_PIN);
 
   // 2. Set I2C Clock to STANDARD MODE (100 kHz)
   Wire.setClock(100000); 
@@ -71,10 +73,10 @@ void setup() {
   Wire.write(0x00);
   Wire.endTransmission();
 
-  // 4. Configure Digital Low-Pass Filter (DLPF) to ~42Hz Bandwidth
+  // 4. Configure Digital Low-Pass Filter (DLPF) to ~42Hz gyro bandwidth
   Wire.beginTransmission(MPU6050_ADDR);
   Wire.write(REG_CONFIG);
-  Wire.write(0x00); 
+  Wire.write(0x03);
   Wire.endTransmission();
 
   // 5. Set Accelerometer (+/- 2g) and Gyroscope (+/- 250 dps) Ranges
