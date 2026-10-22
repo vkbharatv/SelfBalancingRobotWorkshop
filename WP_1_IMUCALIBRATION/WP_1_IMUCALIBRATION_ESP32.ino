@@ -1,9 +1,8 @@
 #include <Wire.h>
 #include <math.h>
 /*
-
   IMU Calibration and Fusion
-  Bord: NodeMCU ESP8266
+  Board: ESP32 Dev Module
   By: Dr Bharat Verma
   Date: 22/10/2026
   Workshop Day 1 Topic: IMU Calibration and Fusion using MPU-6050
@@ -12,11 +11,12 @@
   Description: This code demonstrates the calibration and fusion of data from the MPU-6050 IMU.
   Exercise: Calibrate the gyroscope and fuse accelerometer and gyroscope data to compute roll and pitch angles. Afterthat, try different sensitivity settings and complimentary filter coefficients to observe their effects on the output angles.
   Outcome: Participants should complete the calibration and fusion process, and understand how to adjust parameters for optimal performance.
-
 */
 
 // MPU-6050 Standard I2C Address (0x68)
 const uint8_t MPU6050_ADDR = 0x68;
+const uint8_t I2C_SDA_PIN = 21;
+const uint8_t I2C_SCL_PIN = 22;
 
 // Register Addresses
 const uint8_t REG_CONFIG       = 0x1A; // Low Pass Filter
@@ -33,7 +33,7 @@ float roll = 0.0, pitch = 0.0;
 unsigned long prevTime = 0;
 
 void calibrateGyro() {
-  Serial.println("Calibrating Gyroscope... Keep NodeMCU still!");
+  Serial.println("Calibrating Gyroscope... Keep the ESP32 and MPU-6050 still!");
   int samples = 500;
   
   for (int i = 0; i < samples; i++) {
@@ -61,8 +61,8 @@ void calibrateGyro() {
 void setup() {
   Serial.begin(115200);
 
-  // 1. Initialize I2C Pins for NodeMCU (D2 = SDA, D1 = SCL)
-  Wire.begin(D2, D1);
+  // 1. Initialize I2C pins for a typical ESP32 Dev Module (GPIO 21 = SDA, GPIO 22 = SCL)
+  Wire.begin(I2C_SDA_PIN, I2C_SCL_PIN);
 
   // 2. Set I2C Clock to STANDARD MODE (100 kHz)
   Wire.setClock(100000); 
@@ -73,10 +73,10 @@ void setup() {
   Wire.write(0x00);
   Wire.endTransmission();
 
-  // 4. Configure Digital Low-Pass Filter (DLPF) to ~42Hz Bandwidth
+  // 4. Configure Digital Low-Pass Filter (DLPF) to ~42Hz gyro bandwidth
   Wire.beginTransmission(MPU6050_ADDR);
   Wire.write(REG_CONFIG);
-  Wire.write(0x00); 
+  Wire.write(0x03);
   Wire.endTransmission();
 
   // 5. Set Accelerometer (+/- 2g) and Gyroscope (+/- 250 dps) Ranges
