@@ -9,7 +9,9 @@
   Lab: Control System Lab, ECE Department, The LNMIIT, Jaipur, India
   Society: RAS IEEE Student Branch, The LNMIIT, Jaipur, India
   Description: This code demonstrates the calibration and fusion of data from the MPU-6050 IMU.
-  Exercise: Design the PID controller with ZN Tuning method and implement it on NodeMCU ESP8266 to control the roll angle of a system using the MPU-6050 IMU.
+  Exercise:
+  1. Implement timer based control loop to read the sensor adata and perform controller calculations at a fixed frequency of 100Hz/1000Hz.
+  2. Implement the PID controller with ZN Tuning method and implement it on NodeMCU ESP8266 to control the roll angle of a system using the MPU-6050 IMU.
 */
 
 // MPU-6050 Standard I2C Address (0x68)
