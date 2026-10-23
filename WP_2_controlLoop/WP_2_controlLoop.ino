@@ -38,12 +38,11 @@ float Kp = 1.0;
 float Ki = 0.1;
 float Kd = 0.05;
 
+// Motor Control Pins
 #define IN1  D5
 #define IN2  D6
 #define IN3  D7
 #define IN4  D8
-
-
 
 void setup() {
   Serial.begin(115200);
@@ -56,7 +55,8 @@ void loop() {
   long currentTime = micros();
   float currentRoll = measureRoll();
   float desiredRoll = 0.0;
-  float u = computePID(desiredRoll, currentRoll);  
+  float u = computePID(desiredRoll, currentRoll);
+  move(u);
   Serial.println(u);
   Serial.print(",");
   Serial.println(currentRoll);
@@ -94,6 +94,7 @@ void calibrateGyro()
   Serial.println("Calibration Complete!");
 }
 
+// PID Controller Function
 float computePID(float setpoint, float measured) {
   static float integral = 0.0;
   static float previousError = 0.0;
@@ -115,6 +116,8 @@ float computePID(float setpoint, float measured) {
   
   return output;
 }
+
+// Function to measure roll angle using MPU-6050
 
 float measureRoll() {
   Wire.beginTransmission(MPU6050_ADDR);
@@ -165,6 +168,7 @@ float measureRoll() {
   return roll;
 }
 
+// Function to setup MPU-6050
 void setupACCL() {
   // 1. Initialize I2C Pins for NodeMCU (D2 = SDA, D1 = SCL)
   Wire.begin(I2C_SDA_PIN, I2C_SCL_PIN);
@@ -199,6 +203,7 @@ void setupACCL() {
   calibrateGyro();
 }
 
+// Function to control motor speed and direction
 void move(float speed) {
   if (speed > 0) {
     analogWrite(IN1, speed);
